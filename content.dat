@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Org Management - CardiacCare</title>
+    
+    <script type="module">
+        import jQuery from "/web_modules/jquery.js";
+        window.$ = window.jQuery = jQuery;
+    </script> 
+    <script type="module" src="/web_modules/bootstrap.js"></script>
+    <script type="module" src="/web_modules/@babel/polyfill.js"></script>
+    <script>
+        var applicationBaseUrl = "/";
+        var heartbeatIntervalMinutes = 1;
+        var inactivityLockoutMinutes = 180;
+    </script>
+
+
+    <link type="text/css" href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link type="text/css" href="/lib/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link type="text/css" href="/lib/select2-bootstrap-theme/dist/select2-bootstrap.css" rel="stylesheet">
+
+    <link rel="icon" href="/images/favicon.png">
+
+    
+        <link id="lnktheme_css" href="/css/public/themes/default/theme.css" rel="stylesheet">
+    
+    
+
+    <script type="module">import * as Localization from "/js/public/_shared/localization.js";Localization.SetPhrase("generic-error-message","Something went wrong processing your request.  Please contact your administrator if the problem persists.");
+Localization.SetPhrase("error-web-connection-failure","There was a problem connecting to the web server.  Check your network connection.");
+Localization.SetPhrase("not-found-failure","The server can not find requested resource.(HTTP-404)");
+Localization.SetPhrase("conflict-failure","Request conflicts with the current state of the server. (HTTP-409)");
+Localization.SetPhrase("timeout-failure","Request Timeout. (HTTP-408)");
+Localization.SetPhrase("unauthorized-failure","Unauthenticated request (HTTP-401)");
+Localization.SetPhrase("forbidden-failure","Permission Denied (HTTP-403)");
+</script>
+
+    
+    
+    
+        <link type="text/css" rel="stylesheet" href="/css/public/views/org_management/table.css" />
+        <link type="text/css" rel="stylesheet" href="/css/public/views/org_management/master.css" />
+    
+    
+
+
+
+    
+    <script type="module">import * as Localization from "/js/public/_shared/localization.js";Localization.SetPhrase("user-last-login","Last login:");
+Localization.SetPhrase("user-last-login-ip","IP:");
+Localization.SetPhrase("search-organization","Search Organization");
+</script>
+    
+    <script type="module">import * as Localization from "/js/public/_shared/localization.js";Localization.SetPhrase("health-system","Health System");
+Localization.SetPhrase("health-system-plural","Health Systems");
+Localization.SetPhrase("health-system-add","Add Health System");
+Localization.SetPhrase("report-plural","Reports");
+Localization.SetPhrase("yes","Yes");
+Localization.SetPhrase("no","No");
+Localization.SetPhrase("add","Add");
+Localization.SetPhrase("cancel","Cancel");
+Localization.SetPhrase("missing-fields","The following required fields must be filled in: {0}");
+Localization.SetPhrase("registry-id-plural","Registry Identifiers");
+Localization.SetPhrase("facility-id-plural","Facility Identifiers");
+Localization.SetPhrase("all","All");
+Localization.SetPhrase("active","Active");
+Localization.SetPhrase("not-active","Inactive");
+Localization.SetPhrase("facility-plural","Facilities");
+Localization.SetPhrase("data-form-view","View");
+Localization.SetPhrase("name","Name");
+Localization.SetPhrase("user-plural","Users");
+Localization.SetPhrase("status","Status");
+Localization.SetPhrase("save","Save");
+Localization.SetPhrase("facility","Facility");
+Localization.SetPhrase("user","User");
+Localization.SetPhrase("multi-org-edit-success","Successfully saved changes to {0}");
+Localization.SetPhrase("role","Role");
+Localization.SetPhrase("super-user","Super User");
+Localization.SetPhrase("true","True");
+Localization.SetPhrase("false","False");
+Localization.SetPhrase("health-system-role","Health System Role");
+Localization.SetPhrase("participant-id","Participant ID");
+Localization.SetPhrase("registry-plural","Registries");
+Localization.SetPhrase("email-short","Email");
+Localization.SetPhrase("health-system-add-user","Add Health System User");
+Localization.SetPhrase("edit-general","Edit {0}");
+Localization.SetPhrase("facility-add","Add Facility");
+Localization.SetPhrase("export-to-csv","Export to CSV");
+Localization.SetPhrase("facility-management","Facility Management");
+Localization.SetPhrase("user-management","User Management");
+Localization.SetPhrase("address","Address");
+Localization.SetPhrase("address-line1","Address Line 1");
+Localization.SetPhrase("address-line2","Address Line 2");
+Localization.SetPhrase("city","City");
+Localization.SetPhrase("state","State");
+Localization.SetPhrase("county","County");
+Localization.SetPhrase("country","Country");
+Localization.SetPhrase("postal-code","Zip Code");
+Localization.SetPhrase("search-no-results","No results have been found");
+Localization.SetPhrase("edit","Edit");
+Localization.SetPhrase("expiration-date","Expiration Date");
+Localization.SetPhrase("deactivate-confirmation","Are you sure you want to deactivate this {0}?");
+Localization.SetPhrase("time-zone","Time Zone");
+Localization.SetPhrase("npi","NPI");
+Localization.SetPhrase("tin","TIN");
+Localization.SetPhrase("code","CODE");
+Localization.SetPhrase("cms","CMS");
+Localization.SetPhrase("facility-ems-agency-number","AHA EMS Agency Number");
+Localization.SetPhrase("acc-nj-facility-code","New Jersey Facility Code");
+Localization.SetPhrase("facility-aha-number","AHA Number");
+Localization.SetPhrase("general","General");
+Localization.SetPhrase("facility-user","Facility User");
+Localization.SetPhrase("facility-add-user","Add Facility User");
+Localization.SetPhrase("sts-adult-cardiac-participant-id","STS Adult Cardiac Participant ID");
+Localization.SetPhrase("sts-congenital-participant-id","STS Congenital Participant ID");
+Localization.SetPhrase("sts-thoracic-participant-id","STS Thoracic Participant ID");
+Localization.SetPhrase("ncdr-participant-id","NCDR Participant ID");
+Localization.SetPhrase("nrdr-participant-id","ACR NRDR Participant ID");
+Localization.SetPhrase("gwtg-siteid","AHA/GWTG SiteID");
+Localization.SetPhrase("imageguide-site-id","ImageGuide Site ID");
+Localization.SetPhrase("ny-pfi","New York Permanent Facility Identifier");
+Localization.SetPhrase("nicor-hospital-id","NICOR Hospital ID");
+Localization.SetPhrase("aacvpr-participant-id","AACVPR Participant ID");
+Localization.SetPhrase("aaos-registry-account-id","AAOS Registry Account Id");
+Localization.SetPhrase("svs-vqi-center-id","SVS VQI Center Id");
+Localization.SetPhrase("ccorp-facility-id","CCORP Facility ID");
+Localization.SetPhrase("permission-plural","Permissions");
+Localization.SetPhrase("multi-org-add-entity-success","Successfully added a new {0}");
+Localization.SetPhrase("organization","Organization");
+Localization.SetPhrase("activate","Activate");
+Localization.SetPhrase("deactivate","Deactivate");
+Localization.SetPhrase("activate-success","Successfully activated the {0}");
+Localization.SetPhrase("deactivate-success","Successfully deactivated the {0}");
+Localization.SetPhrase("remove","Remove");
+Localization.SetPhrase("user-remove-fail","Failed to remove user");
+Localization.SetPhrase("user-remove-success","Successfuly removed user");
+Localization.SetPhrase("add-user","Add User");
+Localization.SetPhrase("action-plural","Actions");
+Localization.SetPhrase("all-organizations","All Organizations");
+Localization.SetPhrase("select-organization","Select Organization");
+Localization.SetPhrase("multi-org-switch-error","Failed to switch organization");
+Localization.SetPhrase("invalid-organization","Invalid organization id");
+Localization.SetPhrase("row-plural","Rows");
+Localization.SetPhrase("invalid-facility","Invalid facility id");
+Localization.SetPhrase("invalid-user","Invalid user id");
+Localization.SetPhrase("view-all-users","View All Users");
+Localization.SetPhrase("view-all-facilities","View All Facilities");
+Localization.SetPhrase("view-all-health-systems","View All Health Systems");
+Localization.SetPhrase("view-details","View Details");
+Localization.SetPhrase("select-facility-or-user","Select Facility or User");
+Localization.SetPhrase("table-include-all","All");
+Localization.SetPhrase("navigation","Navigation");
+Localization.SetPhrase("fail-load-organization","Failed to load Organization");
+Localization.SetPhrase("unexpected-error","An unexpected error occurred.");
+Localization.SetPhrase("fail-load-facility","Failed to load Facility");
+Localization.SetPhrase("fail-load-user","Failed to load user.");
+Localization.SetPhrase("page-not-found-heading","Whoops!");
+Localization.SetPhrase("fail-load-organization-manager","Failed to load Organization Manager");
+</script>
+
+
+</head>
+<body>
+    
+
+<div id="alert-container"></div>
+<header >
+    <nav class="navbar navbar-cedaron">
+        <div class="container-fluid">
+            <div class="nav navbar-header">
+                <a id="cedaron-brand" class="navbar-brand" href="/"><img src="/images/logo.png"> CardiacCare&trade;</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                
+            </div>
+            <div class="collapse navbar-collapse" id="header">
+                <ul class="nav navbar-nav navbar-right">
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Utilities<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                    <li><a href="/Abstraction/Productivity">Abstractor Productivity</a></li>
+                                    <li><a href="/Audit">Audit Report</a></li>
+                                        <li class="divider" />
+                                <li><a href="/AnswerList">Answer List</a></li> 
+                                <li><a href="/Entity/UserDevice">Device Lists</a></li>
+                                <li><a href="/Facility/External">External Facilities</a></li>
+                                <li><a href="/Facility/Licensed">Licensed Facilities</a></li>
+                                <li><a href="/Practitioner">Practitioners</a></li>
+                                
+                                
+                            </ul>
+                        </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            
+                            
+                                    <li><a href="/NCDRMaintenance">NCDR Maintenance</a></li>
+                            
+                                <li class="divider" />
+                            
+                            
+                            
+                                <li>
+                                    <a href="/OrgManagement">
+                                        Org Management
+                                    </a>
+                                </li>
+                            <li><a href="/Home/About">About</a></li>
+                            
+                            
+                        </ul>
+                    </li>
+                    <li>
+                        <a id="whoAmI" href="/User/WhoAmI">
+                            <i class="fa fa-user-circle fa-2x hidden-xs" aria-hidden="true"></i>
+                            <span>Joshua Hudson</span>
+                        </a>
+                    </li>
+                </ul>
+                    <div class="navbar-form visible-md visible-lg">
+                        <div class="input-group">
+                            <input type="text" id="headingSearch" class="form-control" placeholder="Search Patients" />
+                            <span class="input-group-btn">
+                                <button id="btnSearchGo" class="btn btn-default" type="button">
+                                    go
+                                </button>
+                            </span>
+                        </div>
+                        
+                    </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="banner-alerts">
+        <div class="banner-alert banner-alert-critical bg-danger" id="unsupported-browser" hidden="hidden">
+            You are currently using an unsupported browser.  Certain features may not work.  Please switch to a supported browser, such as Chrome, Firefox, Edge, or Safari.
+            <script>
+                try { eval("for(let x of[1])(_=>0)(x);"); } // test: for-of, lambdas, and let
+                catch (ex) {
+                    document.getElementById("unsupported-browser").hidden = false;
+                }
+            </script>
+        </div>
+                    <div class="banner-alert bg-danger">
+                        The web server version doesn&#x27;t match the database version. To prevent data corruption, please contact your IT staff to have the database migrated to the correct version. This is usually done by repairing the application server (green button).
+                    </div>
+    </div>
+</header>
+<header id="iframe-header" hidden>
+</header>
+<div id="wrapper">
+    <div class="container" id="content">
+
+        
+<div id="root"></div>
+
+
+
+
+    </div>
+</div>
+
+<div class="modal fade" 
+    id="orgSwitchModal" 
+    tabindex="-1" 
+    aria-labelledby="orgSwitchModalLabel" 
+    aria-hidden="true"
+    >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="orgSwitchModalLabel">Select Organization</h4>  
+            </div>
+            <div class="modal-body">
+                <div id="org-select-list"></div>
+            </div>
+                <div class="modal-footer" style="{ display: flex; justify-content: end;}">
+                    <button type="button"
+                            class="btn btn-default"
+                            aria-label="Close"
+                            data-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>                
+        </div>
+    </div>
+</div>
+
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    });
+
+</script> 
+
+<footer >
+    <p class="copyright">&copy; 1991-2024 by Cedaron Medical, Inc</p>
+    <p class="login-info">
+        <span id="lastLogin" class="login-info-item"></span>
+        <span id="lastLoginIp" class="login-info-item"></span>
+    </p>
+</footer>
+
+
+
+
+
+    <div id="popupNeedLogin" data-backdrop="static" data-keyboard="false" class="modal " role="dialog" tabindex="-1"><div class="modal-dialog modal-lg" role="document"><div class="modal-content">
+        <div class="modal-header">
+            Your login has expired.
+        </div>
+        <div class="modal-body">
+            <div class="text-right">
+                <button class="btn btn-primary" id="popNewLogin">
+                    Login again
+                </button>
+            </div>
+        </div>
+    </div></div></div>
+
+    <script type="module">
+        import * as Localization from "/js/public/_shared/localization.js";
+        import * as global from "/js/public/_shared/global.js";
+
+        Localization.SetPatterns(
+            "{month}/{day}/{year}",
+            "{hour}:{minute}"
+        );
+
+        global.setVersion("10.0.2812.953");
+
+    </script>
+    <script type="module" src="/js/public/_shared/footer.js"></script>
+    
+    
+    <script type="module" src="/js/public/views/org_management/OrgManagementRouteHandler.js">
+    </script>
+
+    <script type="module" src="/js/public/_shared/components/OrgSelectList.js">
+    </script>
+
+</body>
+</html>
